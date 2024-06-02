@@ -1,0 +1,1 @@
+update bindo_gateway.taxi_orders set state = 'Cancelled',updated_at = now() where p_business_id = 'd969e489-1e71-4157-bd53-78629479b449' and channel !='M1OS' and state !='Completed' and state !='Cancelled'

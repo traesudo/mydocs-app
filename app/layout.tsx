@@ -1,4 +1,3 @@
-
 import React from 'react';
 // import {UserIcon} from './UserIcon';
 // import {CameraIcon} from './CameraIcon';
@@ -12,7 +11,6 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <body style={{backgroundColor:"#A1E2E6"}}>
         {children}
       </body>
-      <></>
     </html>
   );
 }

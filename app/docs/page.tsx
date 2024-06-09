@@ -3,9 +3,10 @@
 import React, { useState, useEffect } from 'react';
 import { LaptopOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
-import { Breadcrumb, Layout, Menu, theme, Spin } from 'antd';
+import { Breadcrumb, Layout, Menu, theme, Spin, AutoComplete, Input } from 'antd';
 const { Header, Content, Footer, Sider } = Layout;
-import { getDirectionList, getPostsList, fetchPostContent } from '../../components/RequestData';
+import { getDirectionList, getPostsList, fetchPostContent, getSreachList } from '../../components/RequestData';
+import { SearchOutlined } from '@ant-design/icons';
 
 interface DirectionItem {
   id: number;
@@ -27,6 +28,7 @@ const Loading: React.FC = () => {
     </div>
   );
 };
+const { Search } = Input;
 
 const My: React.FC = () => {
   const {
@@ -36,8 +38,11 @@ const My: React.FC = () => {
   const [items1, setItems1] = useState<MenuProps['items']>([]);
   const [items2, setItems2] = useState<MenuProps['items']>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedKey, setSelectedKey] = useState<string>('1'); // 选中项状态
+  const [selectedDirectionKey, setSelectedDirectionKey] = useState<string>('1'); // 选中项状态 for horizontal menu
+  const [selectedPostKey, setSelectedPostKey] = useState<string>(''); // 选中项状态 for sidebar menu
   const [content, setContent] = useState<string>(''); // State for content
+  const [searchLoading, setSearchLoading] = useState(false);
+  const [options, setOptions] = useState<{ value: string, id: string }[]>([]); // AutoComplete options with id
 
   useEffect(() => {
     // Fetch items1
@@ -84,8 +89,44 @@ const My: React.FC = () => {
 
   const handleMenuClick = (e: any) => {
     const directionId = parseInt(e.key, 10);
-    setSelectedKey(e.key); // 更新选中项
+    setSelectedDirectionKey(e.key); // 更新选中项
     fetchPostsList(directionId);
+    // Reset selected post key when direction changes
+    setSelectedPostKey('');
+  };
+
+  const handleSearch = (value: string) => {
+    setSearchLoading(true);
+    searchOptions(value);
+  };
+
+  const searchOptions = (query: string) => {
+    const onSuccess = (data: any) => {
+      console.log('Search list fetched successfully:', data);
+      const dataOptions = data.map((item: any) => ({ value: item.title, id: item.id }));
+      setOptions(dataOptions);
+      setSearchLoading(false);
+    };
+
+    const onError = (error: any) => {
+      console.error('Failed to fetch search list:', error);
+      setSearchLoading(false);
+    };
+
+    getSreachList({
+      text1: query,
+      onSuccess,
+      onError
+    });
+  };
+
+  const handleSelect = (value: string) => {
+    const selectedOption = options.find(option => option.value === value);
+    if (selectedOption) {
+      handleItemClick({ key: selectedOption.id });
+      // Update selected key for sidebar menu
+      setSelectedPostKey(selectedOption.id);
+    }
   };
 
   const handleItemClick = (e: any) => {
@@ -104,6 +145,8 @@ const My: React.FC = () => {
         console.error("Failed to fetch post content:", error);
       },
     });
+    // Update selected key for sidebar menu
+    setSelectedPostKey(e.key);
   };
 
   if (loading) {
@@ -112,18 +155,41 @@ const My: React.FC = () => {
 
   return (
     <Layout>
-      <Header style={{ display: 'flex', alignItems: 'center' }}>
+      <Header style={{ display: 'flex', alignItems: 'center', position: 'fixed', top: 0, width: '100%', zIndex: 1000 }}>
         <div className="demo-logo" />
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '100%',
+            marginRight: "30px"
+          }}>
+          <AutoComplete
+            options={options}
+            style={{ width: 200 }}
+            onSearch={handleSearch}
+            onSelect={handleSelect} // Add onSelect handler for AutoComplete
+          >
+            <Input.Search
+              placeholder="输入你想查看的内容"
+              enterButton="🔍"
+              size="large"
+              loading={searchLoading}
+              onSearch={handleSearch}
+            />
+          </AutoComplete>
+        </div>
         <Menu
           theme="dark"
           mode="horizontal"
-          selectedKeys={[selectedKey]} // 使用 selectedKeys
+          selectedKeys={[selectedDirectionKey]} // 使用 selectedDirectionKey
           items={items1}
           style={{ flex: 1, minWidth: 0 }}
           onClick={handleMenuClick}
         />
       </Header>
-      <Content style={{ padding: '0 48px' }}>
+      <Content style={{ padding: '0 48px', marginTop: '64px' }}> {/* Add marginTop to avoid content being hidden */}
         <Breadcrumb style={{ margin: '16px 0' }}>
           <Breadcrumb.Item>docs</Breadcrumb.Item>
         </Breadcrumb>
@@ -133,14 +199,13 @@ const My: React.FC = () => {
           <Sider style={{ background: colorBgContainer }} width={200}>
             <Menu
               mode="inline"
-              defaultSelectedKeys={['1']}
-              defaultOpenKeys={['sub1']}
+              selectedKeys={[selectedPostKey]} // Use selectedPostKey for inline menu
               style={{ height: '100%' }}
               items={items2}
               onClick={handleItemClick} // Add onClick handler for items2
             />
           </Sider>
-          <Content style={{ padding: '0 24px', minHeight: 280 }} >
+          <Content style={{ padding: '0 24px', minHeight: 280 }}>
             <div dangerouslySetInnerHTML={{ __html: content }} /> {/* Display the fetched content */}
           </Content>
         </Layout>

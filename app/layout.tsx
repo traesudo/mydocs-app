@@ -8,7 +8,7 @@ interface RootLayoutProps {
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html >
-      <body style={{backgroundColor:"#A1E2E6"}}>
+      <body style={{backgroundColor:"#DCEDFF"}}>
         {children}
       </body>
     </html>

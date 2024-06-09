@@ -72,12 +72,36 @@ export const getDirectionList = ({
     makeHttpRequest({ method: 'GET', url, onSuccess, onError });
   };
 
+  export const getSreachList = ({
+    text1,
+    onSuccess,
+    onError,
+  }: {
+    text1: string;
+    onSuccess: (data: any) => void;
+    onError: (error: any) => void;
+  }) => {
+    console.log("Sreach 中 text", text1);
+    const url = `/api/search?text=${text1}`;
+    makeHttpRequest({ method: 'GET', url, onSuccess, onError });
+  };
+
   export const getPostsList = ({
     id,
     onSuccess,
     onError,
   }: Omit<HttpRequestProps, 'method' | 'url' | 'body'> & { id: number }) => {
     const url = `/api/posts?direction=${id}`;
+    makeHttpRequest({ method: 'GET', url, onSuccess, onError });
+  };
+
+ 
+  
+  export const getLiveList = ({
+    onSuccess,
+    onError,
+  }: Omit<HttpRequestProps, 'method' | 'url' | 'body'>) => {
+    const url = '/api/lives';
     makeHttpRequest({ method: 'GET', url, onSuccess, onError });
   };
   

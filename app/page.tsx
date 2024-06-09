@@ -4,8 +4,9 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useState } from 'react';
-import { Radio, Timeline } from 'antd';
+import { Radio, Timeline, FloatButton, Button } from 'antd';
 import type { RadioChangeEvent } from 'antd';
+import '../styles/myanimation.css'
 
 const App: React.FC = () => {
   const [mode, setMode] = useState<'left' | 'alternate' | 'right'>('left');
@@ -19,26 +20,42 @@ const App: React.FC = () => {
       width: '100%',
       height: '100vh', // Use vh to specify the height as a percentage of the viewport height
       display: 'flex',
-      flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
       padding: '20px', // Add padding
       boxSizing: 'border-box', // Ensure padding is included in the total width/height
     }}>
       <div style={{
+        display: 'flex',
         width: '100%',
         height: '60vh', // Adjust height for the image container
         position: 'relative', // Add position relative for next/image
         marginBottom: '20px', // Add margin between image and the rest of the content
       }}>
-        <Link href="/docs">
+        <div style={{ flex: 1, position: 'relative' }}>
           <Image
             src="/home.png"
             alt="Background Image"
             layout="fill" // Fill the container
             objectFit="contain" // Ensure the entire image is visible
           />
-        </Link>
+        </div>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-around',
+          marginLeft: '20px' // Space between image and buttons
+        }}>
+          <Link href="/docs">
+            <Button type="primary" style={{ backgroundColor: '#C1DEFB' }}>笔记文档</Button>
+          </Link>
+          <Link href="/experiment">
+            <Button type="primary" style={{ backgroundColor: '#C1DEFB' }}>生活记录</Button>
+          </Link>
+          <Link href="/experiment">
+            <Button type="primary" style={{ backgroundColor: '#C1DEFB' }}>实验日志</Button>
+          </Link>
+        </div>
       </div>
       
       <div style={{
@@ -49,53 +66,12 @@ const App: React.FC = () => {
           display: 'flex',
           justifyContent: 'center', // Center the div horizontally
         }}>
-          <div style={{
-            textAlign: 'center',
-            width: '20%', // Set the width to 20%
-            color: "#17485A",
-            fontSize: "24px",
-            fontWeight: 'bold',
-            backgroundColor: 'rgba(255, 255, 255, 0.8)',
-            padding: '5px 10px',
-            borderRadius: '5px',
-          }}>
-            学习日记
-          </div>
         </div>
-        <Radio.Group
-          onChange={onChange}
-          value='学习轨迹'
-          style={{
-            marginBottom: 20,
-          }}
-        >
-          {/* <Radio. >学习轨迹</Radio.> */}
-          {/* <Radio value="left">Left</Radio>
-          <Radio value="right">Right</Radio>
-          <Radio value="alternate">Alternate</Radio> */}
-        </Radio.Group>
-        <Timeline
-          mode={mode}
-          items={[
-            {
-              label: '2023-02-01',
-              children: 'golang学习',
-            },
-            {
-              label: '2024-03-01',
-              children: 'mysql深入学习',
-            },
-            {
-              label: '2024-04-05',
-              children: 'star rocks学习',
-            },
-            {
-              label: '2024-05-18',
-              children: 'nginx学习',
-            },
-          ]}
-        />
       </div>
+      <div>
+        <FloatButton tooltip={<div>欢迎来到我的笔记博客</div>} />
+      </div>
+      {/* <div className='loader'></div> */}
     </div>
   );
 };

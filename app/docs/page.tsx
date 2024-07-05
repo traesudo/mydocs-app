@@ -7,6 +7,7 @@ import { Breadcrumb, Layout, Menu, theme, Spin, AutoComplete, Input } from 'antd
 const { Header, Content, Footer, Sider } = Layout;
 import { getDirectionList, getPostsList, fetchPostContent, getSreachList } from '../../components/RequestData';
 import { SearchOutlined } from '@ant-design/icons';
+import {Button} from "@nextui-org/react";
 
 interface DirectionItem {
   id: number;
@@ -130,11 +131,9 @@ const My: React.FC = () => {
   };
 
   const handleItemClick = (e: any) => {
-    console.log("看看 e.key", e.key);
     fetchPostContent({
       id: e.key,
       onSuccess: (data) => {
-        console.log("Post content fetched successfully:", data);
         if (data.data.content) {
           setContent(data.data.content); // Assuming the API response has a content field
         } else {
@@ -188,6 +187,9 @@ const My: React.FC = () => {
           style={{ flex: 1, minWidth: 0 }}
           onClick={handleMenuClick}
         />
+          <Button isIconOnly color="danger" aria-label="Like">
+           退出文档
+          </Button>    
       </Header>
       <Content style={{ padding: '0 48px', marginTop: '64px' }}> {/* Add marginTop to avoid content being hidden */}
         <Breadcrumb style={{ margin: '16px 0' }}>

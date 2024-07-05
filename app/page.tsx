@@ -32,6 +32,7 @@ const App: React.FC = () => {
         position: 'relative', // Add position relative for next/image
         marginBottom: '20px', // Add margin between image and the rest of the content
       }}>
+        
         <div style={{ flex: 1, position: 'relative' }}>
           <Image
             src="/home.png"
@@ -71,9 +72,17 @@ const App: React.FC = () => {
       <div>
         <FloatButton tooltip={<div>欢迎来到我的笔记博客</div>} />
       </div>
+      {/* <footer>
+      <a href="https://beian.miit.gov.cn/" target="_blank">湘ICP备2024071320号</a>
+      </footer> */}
       {/* <div className='loader'></div> */}
+      <></>
     </div>
   );
 };
 
 export default App;
+
+
+
+//手机端 处理

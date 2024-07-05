@@ -62,6 +62,7 @@ const CardList: React.FC = () => {
             <SettingOutlined key="setting" />,
             <EditOutlined key="edit" />,
             <EllipsisOutlined key="ellipsis" />,
+           
           ]}
         >
           <Meta

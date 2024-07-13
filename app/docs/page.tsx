@@ -1,5 +1,5 @@
 'use client';
-
+import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
 import { LaptopOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
@@ -65,7 +65,6 @@ const My: React.FC = () => {
     // Fetch initial items2
     fetchPostsList(1); // Fetch posts for the initial direction id, assuming 1 is a valid id
   }, []);
-
   const fetchPostsList = (id: number) => {
     setLoading(true);
     getPostsList({
@@ -187,9 +186,11 @@ const My: React.FC = () => {
           style={{ flex: 1, minWidth: 0 }}
           onClick={handleMenuClick}
         />
-          <Button isIconOnly color="danger" aria-label="Like">
-           退出文档
-          </Button>    
+    <Link href="/" passHref>
+      <Button isIconOnly color="danger" aria-label="Like">
+        退出文档
+      </Button> 
+    </Link>    
       </Header>
       <Content style={{ padding: '0 48px', marginTop: '64px' }}> {/* Add marginTop to avoid content being hidden */}
         <Breadcrumb style={{ margin: '16px 0' }}>
